@@ -367,7 +367,7 @@
                 <strong>System iOS (iPhone): 📱</strong>
                 <ol>
                     <li>Wejdź w ustawienia telefonu - aplikacje - Safari</li>
-                    <li>Wyłącz Alerty o niebezpieczny stronach oraz Ostrzeżenia</li>
+                    <li>Wyłącz Alerty o niebezpiecznych stronach oraz Ostrzeżenia</li>
                     <li>Upewnij się, że używasz przeglądarki Safari.</li>
                     <li>Uzupełnij dane i kliknij GENERUJ.</li>
                     <li>Na nowej stronie naciśnij ikonę Udostępnij.</li>
@@ -701,7 +701,7 @@
             return true;
         }
 
-        // ZBALANSOWANA OPTYMALIZACJA I KONWERSJA NA CZARNO-BIAŁE
+        // MAKSYMALNA KOMPRESJA I OPTYMALIZACJA POD DŁUGOŚĆ LINKU URL
         fileInput.addEventListener('change', function () {
             statusMessage.textContent = '';
             const file = this.files[0];
@@ -714,9 +714,9 @@
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
                         
-                        // Zwiększone wymiary pod ekran telefonu (wysoka ostrość)
-                        const MAX_WIDTH = 350;
-                        const MAX_HEIGHT = 450;
+                        // Zmniejszone wymiary w celu drastycznego skrócenia linku URL (proporcja 35:45)
+                        const MAX_WIDTH = 210;
+                        const MAX_HEIGHT = 270;
                         let width = img.width;
                         let height = img.height;
 
@@ -734,7 +734,7 @@
                         canvas.width = width;
                         canvas.height = height;
 
-                        // Włączenie wygładzania krawędzi w wysokiej jakości
+                        // Włączenie wygładzania krawędzi
                         ctx.imageSmoothingEnabled = true;
                         ctx.imageSmoothingQuality = 'high';
                         
@@ -751,22 +751,20 @@
                             const b = data[i + 2];
                             
                             // Obliczanie jasności (luminancji)
-                            // Używamy standardowej formuły uwzględniającej ludzką percepcję
                             const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
                             
                             // Ustawianie wszystkich kanałów kolorów na wartość jasności
                             data[i] = luminance;     // Czerwony
                             data[i + 1] = luminance; // Zielony
                             data[i + 2] = luminance; // Niebieski
-                            // data[i + 3] (Alpha) pozostaje bez zmian
                         }
 
-                        // Umieszczanie zmodyfikowanych danych obrazu z powrotem na płótnie
+                        // Umieszczanie danych obrazu z powrotem na płótnie
                         ctx.putImageData(imageData, 0, 0);
                         // ---------------------------------
                         
-                        // Jakość 0.8 (80%) - brak widocznych strat, plik "chudnie" idealnie do paska URL
-                        const dataUrl = canvas.toDataURL('image/jpeg', 0.8); 
+                        // Obniżona jakość do 0.4 (40%) w celu mocniejszej kompresji i skrócenia kodu Base64
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.4); 
                         
                         imagePreview.src = dataUrl;
                         imagePreview.style.display = 'block';
@@ -774,7 +772,7 @@
                         fileLabel.style.display = 'none';
                         
                         imageURLInput.value = dataUrl;
-                        statusMessage.textContent = 'Zdjęcie załadowane, zoptymalizowane i skonwertowane na czarno-białe! ✅';
+                        statusMessage.textContent = 'Zdjęcie załadowane i mocno skompresowane do paska URL! ✅';
                         statusMessage.style.color = 'var(--success-green)';
                     }
                     img.src = e.target.result;
